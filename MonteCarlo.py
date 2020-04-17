@@ -4,25 +4,23 @@ from nCube import NCube
 
 
 class MonteCarlo:
-    def __init__(self, samples):
-        self.samples = samples
-
+    def __init__(self):
         self.nBall = None
         self.nCube = None
 
         self.volume = None
 
-    def nBallVolume(self, dimensions, cubeLength=2, sphereRadius=1):
+    def nBallVolume(self, dimensions, cubeLength=2, sphereRadius=1, sampleSize=10000):
         self.nBall = NBall(dimensions, sphereRadius)
-        self.nCube = NCube(dimensions, cubeLength)
-        counter = 0
 
-        for i in range(self.samples):
-            randomNorm = self.nCube.randomNorm
-            if randomNorm <= self.nBall.r:
-                counter += 1
+        self.nCube = NCube(dimensions, cubeLength, sampleSize)
+        self.nCube.generateUniformSamples()
 
-        self.volume = counter / self.samples * self.nCube.volume
+        norms = self.nCube.generateNorms
+        conditions = norms[:] <= sphereRadius
+        results = norms[conditions]
+
+        self.volume = len(results) / self.nCube.sampleSize * self.nCube.volume
         return self.volume
 
     @property
