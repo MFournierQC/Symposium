@@ -6,16 +6,33 @@ from numpy.linalg import norm
 class NCube:
     # A simple class to create a n-dimensional cube and return some useful values.
     def __init__(self, dimensions, length=2):
-        self.n = dimensions
+        self.dimensions = dimensions
         self.a = length
 
-        self.volume = self.a ** self.n
-        self.surface = 2 * self.n * (self.a ** (self.n - 1))
+        self.volume = self.a ** self.dimensions
+        self.surface = 2 * self.dimensions * (self.a ** (self.dimensions - 1))
 
         self.samples = None
 
-    def generateUniformSamples(self, sampleSize=10000):
-        self.samples = uniform(-self.a / 2, self.a / 2, (sampleSize, self.n))
+    def uniformSample(self, sampleSize=10000):
+        self.samples = uniform(-self.a / 2, self.a / 2, (sampleSize, self.dimensions))
+
+    def uniformLatinHypercubeSample(self, sampleSize=10000):
+        interval = np.linspace(0, 1, sampleSize + 1)
+
+        uniformDistribution = np.random.rand(sampleSize, self.dimensions)
+        a = interval[:sampleSize]
+        b = interval[1:sampleSize + 1]
+        rdpoints = np.zeros_like(uniformDistribution)
+        for i in range(self.dimensions):
+            rdpoints[:, i] = uniformDistribution[:, i] * (b - a) + a
+
+        uniformSample = np.zeros_like(rdpoints)
+        for i in range(self.dimensions):
+            order = np.random.permutation(range(sampleSize))
+            uniformSample[:, i] = rdpoints[order, i]
+
+        self.samples = (uniformSample * self.a) - self.a / 2
 
     @property
     def generateNorms(self):
@@ -26,7 +43,7 @@ class NCube:
 
     @property
     def randomCoordinates(self):
-        return uniform(-self.a / 2, self.a / 2, self.n)
+        return uniform(-self.a / 2, self.a / 2, self.dimensions)
 
     @property
     def randomNorm(self):

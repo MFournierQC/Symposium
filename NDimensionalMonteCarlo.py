@@ -1,4 +1,3 @@
-import numpy as np
 from nBall import NBall
 from nCube import NCube
 
@@ -10,12 +9,22 @@ class NDimensionalMonteCarlo:
         self.nCube = NCube(dimensions, length)
         self.volume = None
 
-    def nBallVolumeUniformSample(self, sampleSize=10000):
-        self.nCube.generateUniformSamples(sampleSize)
-        norms = self.nCube.generateNorms
-
+    def checkConditions(self, norms):
         conditions = norms[:] <= self.nBall.r
-        results = norms[conditions]
+        return norms[conditions]
+
+    def nBallVolumeUniformSample(self, sampleSize=10000):
+        self.nCube.uniformSample(sampleSize)
+        norms = self.nCube.generateNorms
+        results = self.checkConditions(norms)
+
+        self.volume = (len(results) / sampleSize) * self.nCube.volume
+        return self.volume
+
+    def nBallVolumeLatinHypercubeSample(self, sampleSize=10000):
+        self.nCube.uniformLatinHypercubeSample(sampleSize)
+        norms = self.nCube.generateNorms
+        results = self.checkConditions(norms)
 
         self.volume = (len(results) / sampleSize) * self.nCube.volume
         return self.volume
