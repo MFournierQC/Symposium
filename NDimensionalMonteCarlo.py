@@ -31,4 +31,4 @@ class NDimensionalMonteCarlo:
 
     @property
     def difference(self):
-        return self.volume - self.nBall.volume
+        return abs(self.volume - self.nBall.volume)
