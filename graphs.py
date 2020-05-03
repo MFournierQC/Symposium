@@ -98,7 +98,7 @@ if __name__ == '__main__':
         plt.legend(loc='upper right')
         plt.show()
 
-    doCompareConvergence = True
+    doCompareConvergence = False
     if doCompareConvergence is True:
         # Declarations of our useful variables and objects.
         dimensions = 2
