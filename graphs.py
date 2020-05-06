@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from NDimensionalMonteCarlo import NDimensionalMonteCarlo
 from nCube import NCube
 from nBall import NBall
@@ -9,7 +10,8 @@ if __name__ == '__main__':
     radius = 1
     length = 2
 
-    doCompareVolumes = False
+    # This is example code to generate the graphs for an n-sphere and n-cube.
+    doCompareVolumes = True
     if doCompareVolumes is True:
         dimensions = np.arange(1, 20, 1)
         cubeVolumes = []
@@ -36,7 +38,24 @@ if __name__ == '__main__':
         plt.legend(loc='upper left')
         plt.show()
 
-    doMC = False
+    # This is example code to generate a 3d sample with LHS method.
+    doLHSSampleExample = True
+    if doLHSSampleExample is True:
+        dimensions = 3
+        nCube = NCube(dimensions, length)
+        nCube.uniformLatinHypercubeSample(50)
+        samples = nCube.samples
+
+        fig = plt.figure(figsize=(8, 8))
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(samples[:, 0], samples[:, 1], samples[:, 2])
+        ax.set_xlabel(r'$x_{1}$ $[-]$')
+        ax.set_ylabel(r'$x_{2}$ $[-]$')
+        ax.set_zlabel(r'$x_{3}$ $[-]$')
+        plt.show()
+
+    # This is example code to generate the graphs for convergence using the MC method.
+    doMC = True
     if doMC is True:
         # Declarations of our useful variables and objects.
         dimensions = 2
@@ -67,6 +86,7 @@ if __name__ == '__main__':
         plt.legend(loc='upper right')
         plt.show()
 
+    # This is example code to generate the graphs for convergence using the LHS method.
     doLHS = False
     if doLHS is True:
         # Declarations of our useful variables and objects.
@@ -98,7 +118,8 @@ if __name__ == '__main__':
         plt.legend(loc='upper right')
         plt.show()
 
-    doCompareConvergence = True
+    # This is example code to compare the convergence of MC and LHS method and generate a graph.
+    doCompareConvergence = False
     if doCompareConvergence is True:
         # Declarations of our useful variables and objects.
         dimensions = 2
@@ -137,6 +158,7 @@ if __name__ == '__main__':
         plt.legend(loc='upper right')
         plt.show()
 
+    # Example function to visualize the different sampling methods.
     doVisualizeSampling = False
     if doVisualizeSampling is True:
         dimensions = 2
@@ -188,6 +210,7 @@ if __name__ == '__main__':
 
         plt.show()
 
+    # Example code to compare the uniformity of two samples from MC and LHS methods and graph the comparison.
     doCompareUniformity = False
     if doCompareUniformity is True:
         dimensions = 3

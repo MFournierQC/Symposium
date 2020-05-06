@@ -1,5 +1,5 @@
 import numpy as np
-from numpy.random import uniform, normal
+from numpy.random import uniform, rand
 from numpy.linalg import norm
 
 
@@ -20,12 +20,12 @@ class NCube:
     def uniformLatinHypercubeSample(self, sampleSize=10000):
         interval = np.linspace(0, 1, sampleSize + 1)
 
-        uniformDistribution = np.random.rand(sampleSize, self.dimensions)
-        a = interval[:sampleSize]
-        b = interval[1:sampleSize + 1]
+        uniformDistribution = rand(sampleSize, self.dimensions)
+        lower = interval[:sampleSize]
+        upper = interval[1:sampleSize + 1]
         rdpoints = np.zeros_like(uniformDistribution)
         for i in range(self.dimensions):
-            rdpoints[:, i] = uniformDistribution[:, i] * (b - a) + a
+            rdpoints[:, i] = uniformDistribution[:, i] * (upper - lower) + lower
 
         uniformSample = np.zeros_like(rdpoints)
         for i in range(self.dimensions):
